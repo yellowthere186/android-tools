@@ -1,0 +1,22 @@
+a script that uses ADB (Android Debug Bridge) to install an APK and grant permissions without user interaction. This is commonly used for testing and development purposes.
+
+#!/bin/bash
+
+# Path to the APK file
+APK_PATH="/path/to/your/app.apk"
+
+# Package name of the app
+PACKAGE_NAME="com.example.yourapp"
+
+# Install the APK
+adb install -r "$APK_PATH"
+
+# Grant permissions
+adb shell pm grant "$PACKAGE_NAME" android.permission.CAMERA
+adb shell pm grant "$PACKAGE_NAME" android.permission.RECORD_AUDIO
+adb shell pm grant "$PACKAGE_NAME" android.permission.ACCESS_FINE_LOCATION
+adb shell pm grant "$PACKAGE_NAME" android.permission.WRITE_EXTERNAL_STORAGE
+
+# Start the main activity
+adb shell am start -n "$PACKAGE_NAME/.MainActivity"
+
