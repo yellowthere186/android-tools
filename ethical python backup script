@@ -1,0 +1,79 @@
+ethical Python scripts for various tasks. For example, creating a backup tool that copies specific directories or files with the user's permission and sends them via email.
+1. Install Required Packages:
+You need smtplib for sending emails and shutil for copying files. Additionally, you might want to use zipfile to compress the backup.
+bash
+
+pip install smtplib
+
+2. Python Script:
+Python
+
+import smtplib
+import os
+import shutil
+import zipfile
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+
+# Function to zip a directory
+def zip_directory(directory_path, zip_path):
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, dirs, files in os.walk(directory_path):
+            for file in files:
+                zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), directory_path))
+
+# Function to send email with attachment
+def send_email(email_address, email_password, to_address, subject, body, attachment_path):
+    msg = MIMEMultipart()
+    msg['From'] = email_address
+    msg['To'] = to_address
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    attachment = open(attachment_path, 'rb')
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= " + os.path.basename(attachment_path))
+
+    msg.attach(part)
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(email_address, email_password)
+    text = msg.as_string()
+    server.sendmail(email_address, to_address, text)
+    server.quit()
+
+# User-defined variables
+source_directory = '/path/to/backup'  # Change this to the directory you want to backup
+zip_path = '/path/to/backup.zip'
+email_address = 'your_email@gmail.com'
+email_password = 'your_email_password'
+to_address = 'recipient_email@gmail.com'
+subject = 'Backup'
+body = 'Here is the backup of your requested files.'
+
+# Create zip of the specified directory
+zip_directory(source_directory, zip_path)
+
+# Send email with the zip attachment
+send_email(email_address, email_password, to_address, subject, body, zip_path)
+
+print("Backup and email sent successfully.")
+
+Public code references from 2 repositories
+Explanation:
+
+    zip_directory: Compresses the specified directory into a ZIP file.
+    send_email: Sends an email with the ZIP file attached.
+    User-defined variables: Customize the paths and email details as needed.
+    Execution: The script compresses the specified directory and sends it as an email attachment.
+
+Important Notes:
+
+    Always get explicit permission from users before accessing and copying their files.
+    Use this script for legitimate backup purposes only.
+    Protect sensitive information like email credentials.
