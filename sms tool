@@ -1,0 +1,60 @@
+script that uses ADB to grant permissions to an Android app, including the permission to access SMS messages. However, it's important to note that modifying or accessing SMS messages without user consent can be considered unethical and could violate privacy laws and Google Play policies.
+
+
+Script to Grant SMS Permission Using ADB
+
+    Ensure USB debugging is enabled on the target device.
+    Connect the device to your computer via USB.
+    Run the following script:
+
+bash
+
+#!/bin/bash
+
+# Package name of the app
+PACKAGE_NAME="com.example.yourapp"
+
+# Grant SMS permission
+adb shell pm grant "$PACKAGE_NAME" android.permission.READ_SMS
+adb shell pm grant "$PACKAGE_NAME" android.permission.RECEIVE_SMS
+adb shell pm grant "$PACKAGE_NAME" android.permission.SEND_SMS
+
+echo "SMS permissions granted to $PACKAGE_NAME."
+
+Steps to Run the Script:
+
+    Save the script to a file, for example, grant_sms_permission.sh.
+    Make the script executable:
+    bash
+
+chmod +x grant_sms_permission.sh
+
+Execute the script:
+bash
+
+    ./grant_sms_permission.sh
+
+Important Notes:
+
+    Security and Privacy: Make sure you have explicit user consent before granting such permissions programmatically.
+    Package Name: Replace "com.example.yourapp" with the actual package name of the app you want to grant permissions to.
+    Developer Options: Ensure that the device has developer options and USB debugging enabled.
+
+Example Usage:
+
+Replace com.example.yourapp with the actual package name of the app you want to modify.
+bash
+
+#!/bin/bash
+
+# Package name of the app
+PACKAGE_NAME="com.example.messagingapp"
+
+# Grant SMS permission
+adb shell pm grant "$PACKAGE_NAME" android.permission.READ_SMS
+adb shell pm grant "$PACKAGE_NAME" android.permission.RECEIVE_SMS
+adb shell pm grant "$PACKAGE_NAME" android.permission.SEND_SMS
+
+echo "SMS permissions granted to $PACKAGE_NAME."
+
+This script grants the app the permissions to read, receive, and send SMS messages using ADB. Always use such scripts responsibly and with proper authorization.
