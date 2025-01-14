@@ -1,1 +1,28 @@
+Explanation:
+
+    APK_PATH: Set this variable to the path of your APK file.
+    PACKAGE_NAME: Set this to the package name of your application.
+    adb install -r "$APK_PATH": This command installs the APK on the connected device. The -r flag allows reinstallation if the app is already installed.
+    adb shell pm grant: These commands grant specific permissions to the app. Replace the permissions with those required by your app.
+    adb shell am start -n "$PACKAGE_NAME/.MainActivity": This command starts the main activity of your application.
+
+Running the Script:
+
+    Save the script to a file, for example, install_app.sh.
+    Make the script executable:
+    bash
+
+chmod +x install_app.sh
+
+Execute the script:
+bash
+
+    ./install_app.sh
+
+Make sure you have ADB installed and your Android device connected with USB debugging enabled.
+Note:
+
+    This script is intended for development and testing purposes. Installing apps and granting permissions without user interaction should be done responsibly and ethically.
+    Ensure you have the necessary permissions and authorization to perform these actions on the device.
+
 
